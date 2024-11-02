@@ -57,7 +57,7 @@ def login():
          user = User.query.filter_by(username = username).first()
          print(user)
          if user and user.password == password:
-            session['username'] = user.fullname
+            session['username'] = user.username
             return redirect(url_for('home',message=f"Welcome {user.fullname}"))
          else:
             return render_template('login.html',message="Incorrect credentials!!") 
@@ -86,7 +86,7 @@ def signup():
                new_user = User(username=username,fullname=fullname,password=password)
                db.session.add(new_user)
                db.session.commit()
-               session['username'] = fullname
+               session['username'] = username
                return redirect('/')
             else:
                return render_template('signup.html',message="Passwords don't match.!!")
