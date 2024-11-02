@@ -1,6 +1,6 @@
-# README.md [(**_Flask NewsApp_**)](https://newsapi.org/)
+# README.md (**_Flask NewsApp_**)
 
-## This is a fullstack flask news app with support of databse and authentication. The news is coming from the _Newsapi.org API_
+## This is a fullstack flask news app with support of databse and authentication. The news is coming from the [_Newsapi.org API_](https://newsapi.org/)
 
 - User can login and signup.
 - Also they can bookmark their favorite news articles and these infomation are stored in database in two tables **Users** and **Bookmarks**
@@ -34,3 +34,14 @@
 4. You can also search for specific topic using search bar in navbar.
 5. You can bookmark any article and the articles then be bookmarked.
 6. You can see the bookmarked articles in **Bookmark** section.
+
+## Urls 
+| Route                           | Description                               |
+|---------------------------------|-------------------------------------------|
+| `http://localhost:5000/login`   | Login Page                                |
+| `http://localhost:5000/signup`  | Signup Page                               |
+| `http://localhost:5000/`        | Home Page (If logged in)                  |
+| `http://localhost:5000/search`  | Results for searched query (POST request) |
+| `http://localhost:5000/category/?category=_{category}_` | News for specific category |
+| `http://localhost:5000/bookmarks` | Bookmarks Page (If logged in)             |
+

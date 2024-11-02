@@ -87,7 +87,7 @@ def signup():
                db.session.add(new_user)
                db.session.commit()
                session['username'] = username
-               return redirect('/')
+               return redirect(url_for('home',message=f"Welcome {fullname}!!"))
             else:
                return render_template('signup.html',message="Passwords don't match.!!")
             
@@ -113,7 +113,7 @@ def home():
 @app.route('/search/', methods=['POST'])
 def search():
    query = request.form.get('query')
-   if query :
+   if "username" in session and  query :
       URL=f'{BASE_URL}/everything?q={query}&apiKey={API_KEY}'
       data = requests.get(URL)
       data = data.json()
@@ -128,28 +128,29 @@ def search():
       
       return render_template('index.html',news_articles=articles,query=query,title="Top Headlines")
    
-   return render_template('index.html',news_articles=None,title="Top Headlines")
+   return redirect('login')
 
 @app.route('/category/', methods=['GET'])
 def category():
    query = request.args.get('category')
-   if query :
-      URL=f'{BASE_URL}/top-headlines?category={query}&apiKey={API_KEY}'
-      data = requests.get(URL)
-      data = data.json()
-      print(URL)
-      articles = data.get('articles', [])
-      with open('articles.json','w') as file:
-         # json.dump(articles,file,indent=4)
-         print("written!!")
-      file.close()
-      if len(articles) > 20:
-         articles = articles[:20]
-      return render_template('index.html',news_articles=articles,query=query,title=query)
+   if "username" in session and query:
+         URL=f'{BASE_URL}/top-headlines?category={query}&apiKey={API_KEY}'
+         data = requests.get(URL)
+         data = data.json()
+         print(URL)
+         articles = data.get('articles', [])
+         with open('articles.json','w') as file:
+            # json.dump(articles,file,indent=4)
+            print("written!!")
+         file.close()
+         if len(articles) > 20:
+            articles = articles[:20]
+         return render_template('index.html',news_articles=articles,query=query,title=query)
    
-   return render_template('index.html',news_articles=None)
+   return redirect(url_for('login'))
+      
 
-@app.route('/add_bookmark',methods=["POST","GET"])
+@app.route('/add_bookmark/',methods=["POST","GET"])
 def add_bookmark():
    message = request.args.get('message')
    if request.method=="POST" and  "username" in session:
@@ -187,7 +188,7 @@ def bookmarks():
             db.session.commit() 
          return redirect(url_for('bookmarks',message='Bookmark removed!!'))
       
-   return redirect('login/') 
+   return redirect(url_for('login'))
 
 if __name__ == '__main__':
    with app.app_context():
